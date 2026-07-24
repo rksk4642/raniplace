@@ -12,8 +12,8 @@ export default function Home() {
             <span>raniplace</span>
           </div>
           <nav className="hidden md:flex gap-8">
-            <Link href="#" className="text-sm font-medium text-[#2C3E35]/80 hover:text-[#5B88B2] transition-colors duration-300">소개</Link>
-            <Link href="#" className="text-sm font-medium text-[#2C3E35]/80 hover:text-[#5B88B2] transition-colors duration-300">수업 자료</Link>
+            <Link href="/calendar" className="text-sm font-medium text-[#2C3E35]/80 hover:text-[#5B88B2] transition-colors duration-300">나만의 달력</Link>
+            <Link href="/observation" className="text-sm font-medium text-[#2C3E35]/80 hover:text-[#5B88B2] transition-colors duration-300">관찰 기록장</Link>
             <Link href="#" className="text-sm font-medium text-[#2C3E35]/80 hover:text-[#5B88B2] transition-colors duration-300">업무 팁</Link>
           </nav>
         </div>
@@ -42,18 +42,20 @@ export default function Home() {
             </p>
           </div>
 
-          {/* 확장성을 위한 가짜(Placeholder) 버튼 */}
-          <div className="pt-4">
-            <button className="group relative px-8 py-4 bg-[#2C3E35] text-white rounded-2xl font-medium tracking-tight overflow-hidden shadow-soft hover:shadow-[0_12px_40px_rgba(44,62,53,0.2)] transition-all duration-500 ease-out hover:-translate-y-1">
+          {/* 주요 기능 버튼들 */}
+          <div className="pt-4 flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/calendar" className="group inline-flex justify-center relative px-8 py-4 bg-[#2C3E35] text-white rounded-2xl font-medium tracking-tight overflow-hidden shadow-soft hover:shadow-[0_12px_40px_rgba(44,62,53,0.2)] transition-all duration-500 ease-out hover:-translate-y-1">
               <span className="relative z-10 flex items-center gap-2">
-                시작하기
-                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
+                나만의 업무 달력
               </span>
-              {/* 호버 시 나타나는 그라데이션 오버레이 */}
               <div className="absolute inset-0 bg-gradient-to-r from-[#5B88B2] to-[#6E815C] opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-out" />
-            </button>
+            </Link>
+            
+            <Link href="/observation" className="group inline-flex justify-center relative px-8 py-4 bg-white text-[#2C3E35] border border-[#B8C4A9]/30 rounded-2xl font-medium tracking-tight overflow-hidden shadow-soft hover:shadow-[0_12px_40px_rgba(160,196,226,0.2)] transition-all duration-500 ease-out hover:-translate-y-1 hover:border-[#5B88B2]/50">
+              <span className="relative z-10 flex items-center gap-2">
+                학생 관찰 기록장
+              </span>
+            </Link>
           </div>
         </div>
       </main>
