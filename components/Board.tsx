@@ -191,7 +191,7 @@ export default function Board({ category, title, description }: BoardProps) {
                   {newAttachments.map(file => (
                     <li key={file.id} className="flex items-center justify-between bg-white px-3 py-2 rounded-xl border border-[#B8C4A9]/20 text-xs">
                       <div className="flex items-center gap-2">
-                        {file.type.includes('image') ? <FileImage className="w-4 h-4 text-amber-500" /> : <FileIcon className="w-4 h-4 text-[#5B88B2]" />}
+                        {file.type.includes('image') ? <FileImage className="w-4 h-4 text-amber-500" /> : <FileText className="w-4 h-4 text-[#5B88B2]" />}
                         <span className="font-medium text-[#2C3E35] truncate max-w-[200px]">{file.name}</span>
                         <span className="text-gray-400">({(file.size / 1024).toFixed(1)}KB)</span>
                       </div>
@@ -250,7 +250,7 @@ export default function Board({ category, title, description }: BoardProps) {
                 {currentPost.attachments.map(file => (
                   <div key={file.id} className="p-3 rounded-2xl border border-[#B8C4A9]/30 bg-[#F8FAF9] flex flex-col gap-2">
                     <a href={file.dataUrl} download={file.name} className="flex items-center gap-2 text-sm font-bold text-[#5B88B2] hover:underline">
-                      {file.type.includes('image') ? <FileImage className="w-4 h-4" /> : <FileIcon className="w-4 h-4" />}
+                      {file.type.includes('image') ? <FileImage className="w-4 h-4" /> : <FileText className="w-4 h-4" />}
                       <span className="truncate">{file.name}</span>
                     </a>
                     {file.type.includes('image') && (
