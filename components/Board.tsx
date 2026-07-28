@@ -9,7 +9,7 @@ import {
 import { getLoggedInUser, LoggedInUser } from '@/utils/auth';
 import { 
   FileText, MessageSquare, Paperclip, ChevronLeft, 
-  Plus, Trash2, FileImage, FileIcon, Lock, Upload
+  Plus, Trash2, FileImage, Lock, Upload
 } from 'lucide-react';
 
 interface BoardProps {
