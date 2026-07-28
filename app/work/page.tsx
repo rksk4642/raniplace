@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { 
-  Briefcase, ShieldCheck, KeyRound, UserPlus, LogIn, CheckCircle2, 
+  Briefcase, ShieldCheck, UserPlus, LogIn, CheckCircle2, 
   AlertCircle, ArrowLeft, ArrowRight, LogOut, FileText, CheckSquare, 
-  PhoneCall, ExternalLink, Sparkles, Building2, Mail, MessageSquare, Lock 
+  PhoneCall, Lock 
 } from 'lucide-react';
 import { 
   getLoggedInUser, 

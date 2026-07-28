@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { 
-  Calculator, Waves, Briefcase, BookOpen, Lock, Unlock, 
+  Calculator, Briefcase, BookOpen, Lock, Unlock, 
   Calendar as CalendarIcon, ShieldCheck, LogOut, ChevronRight, 
   ChevronDown, CheckCircle2, AlertCircle, ArrowRight, Sparkles, 
-  Menu, X, KeyRound, UserCheck 
+  Menu, X, KeyRound
 } from 'lucide-react';
 import { 
   isAdminUnlocked as checkAdminUnlocked, 

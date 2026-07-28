@@ -1,10 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { 
-  BookOpen, Timer, Users, Shuffle, ArrowLeft, Play, Pause, 
-  RotateCcw, Sparkles, Award, CheckCircle2, Volume2, Bell 
+  Timer, Users, Shuffle, Play, Pause, 
+  RotateCcw, Sparkles, Award 
 } from 'lucide-react';
 
 export default function ClassPage() {
