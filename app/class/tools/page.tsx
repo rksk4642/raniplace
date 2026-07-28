@@ -85,30 +85,14 @@ export default function ClassPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAF9] text-[#2C3E35] p-6 md:p-12">
-      <div className="max-w-6xl mx-auto space-y-8">
-        
-        {/* 상단 네비게이션 헤더 */}
-        <header className="bg-white p-6 rounded-3xl border border-[#B8C4A9]/20 shadow-soft flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <Link href="/" className="inline-flex items-center gap-1.5 text-[#5B88B2] font-bold text-xs mb-2 hover:underline">
-              <ArrowLeft className="w-3.5 h-3.5" />
-              <span>메인 내비게이션으로 돌아가기</span>
-            </Link>
-            <h1 className="text-2xl md:text-3xl font-black text-[#2C3E35] flex items-center gap-3 tracking-tight">
-              <BookOpen className="w-8 h-8 text-[#6E815C]" />
-              교실 수업 지원 도구 모음
-            </h1>
-            <p className="text-xs md:text-sm text-[#2C3E35]/60 mt-1 font-medium">
-              수업 활동 타이머, 행운의 발표자 뽑기, 랜덤 모둠 편성기 등 수업 집중도를 높이는 교사용 스마트 도구입니다.
-            </p>
-          </div>
-
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#6E815C]/10 text-[#6E815C] font-bold text-xs self-start md:self-center">
-            <Sparkles className="w-4 h-4" />
-            <span>자유 열람 및 즉시 사용 가능</span>
-          </div>
-        </header>
+    <div className="space-y-8 animate-in fade-in duration-300">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-bold text-[#2C3E35]">수업 도구 모음</h2>
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-[#6E815C]/10 text-[#6E815C] font-bold text-xs">
+          <Sparkles className="w-4 h-4" />
+          <span>자유 열람 및 즉시 사용 가능</span>
+        </div>
+      </div>
 
         {/* 3대 교실 수업 도구 그리드 */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -320,7 +304,6 @@ export default function ClassPage() {
 
         </div>
 
-      </div>
     </div>
   );
 }

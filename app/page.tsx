@@ -144,26 +144,56 @@ export default function Home() {
           </Link>
 
           {/* 2. 수업 */}
-          <Link 
-            href="/class"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="group flex items-center justify-between p-3.5 rounded-2xl bg-[#F8FAF9]/80 hover:bg-[#6E815C]/10 border border-transparent hover:border-[#6E815C]/20 transition-all duration-200"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-white shadow-soft flex items-center justify-center text-[#6E815C] group-hover:scale-105 transition-transform duration-200">
-                <BookOpen className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="font-bold text-sm text-[#2C3E35] group-hover:text-[#6E815C] transition-colors">
-                  2. 수업
+          <div className="flex flex-col gap-1">
+            <Link 
+              href="/class/tools"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="group flex items-center justify-between p-3.5 rounded-2xl bg-[#F8FAF9]/80 hover:bg-[#6E815C]/10 border border-transparent hover:border-[#6E815C]/20 transition-all duration-200"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-white shadow-soft flex items-center justify-center text-[#6E815C] group-hover:scale-105 transition-transform duration-200">
+                  <BookOpen className="w-5 h-5" />
                 </div>
-                <div className="text-xs text-[#2C3E35]/60 mt-0.5">
-                  수업 타이머 및 모둠 도구
+                <div>
+                  <div className="font-bold text-sm text-[#2C3E35] group-hover:text-[#6E815C] transition-colors">
+                    2. 수업
+                  </div>
+                  <div className="text-xs text-[#2C3E35]/60 mt-0.5">
+                    도구 모음 및 유용한 링크
+                  </div>
                 </div>
               </div>
+              <ChevronDown className="w-4 h-4 text-[#2C3E35]/40 transition-all" />
+            </Link>
+
+            {/* 2. 수업 - 하위 메뉴 */}
+            <div className="ml-12 pl-3 border-l-2 border-[#B8C4A9]/20 flex flex-col gap-1 py-1">
+              <Link 
+                href="/class/math" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-xs font-bold text-[#2C3E35]/70 hover:text-[#6E815C] px-3 py-2 rounded-xl hover:bg-[#6E815C]/5 transition-colors flex items-center gap-2"
+              >
+                <div className="w-1.5 h-1.5 rounded-full bg-[#B8C4A9]" />
+                직무수학
+              </Link>
+              <Link 
+                href="/class/tools" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-xs font-bold text-[#2C3E35]/70 hover:text-[#6E815C] px-3 py-2 rounded-xl hover:bg-[#6E815C]/5 transition-colors flex items-center gap-2"
+              >
+                <div className="w-1.5 h-1.5 rounded-full bg-[#B8C4A9]" />
+                수업 도구모음
+              </Link>
+              <Link 
+                href="/class/links" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-xs font-bold text-[#2C3E35]/70 hover:text-[#6E815C] px-3 py-2 rounded-xl hover:bg-[#6E815C]/5 transition-colors flex items-center gap-2"
+              >
+                <div className="w-1.5 h-1.5 rounded-full bg-[#B8C4A9]" />
+                사이트 링크
+              </Link>
             </div>
-            <ChevronRight className="w-4 h-4 text-[#2C3E35]/40 group-hover:text-[#6E815C] group-hover:translate-x-0.5 transition-all" />
-          </Link>
+          </div>
 
           {/* 3. 개인 (비밀번호 설정 및 하위 메뉴) */}
           <div className="pt-2">
