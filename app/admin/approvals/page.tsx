@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { 
   ShieldCheck, CheckCircle2, XCircle, Clock, ArrowLeft, ArrowRight, 
   UserPlus, RefreshCw, AlertCircle, Building2, Mail, MessageSquare, 
-  Lock, KeyRound, Sparkles, Filter 
+  Lock, Filter 
 } from 'lucide-react';
 import { 
   getAuthRequests, 

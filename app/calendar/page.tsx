@@ -2,8 +2,8 @@
 import { useState, useEffect } from 'react';
 import CalendarGrid from '@/components/CalendarGrid';
 import { 
-  Calendar as CalendarIcon, Settings, Link as LinkIcon, 
-  Lock, AlertCircle, ArrowLeft, ShieldCheck, KeyRound, CheckCircle2 
+  Calendar as CalendarIcon, Link as LinkIcon, 
+  Lock, AlertCircle, ArrowLeft, ShieldCheck
 } from 'lucide-react';
 import Link from 'next/link';
 import { 

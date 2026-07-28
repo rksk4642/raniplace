@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import Board from '@/components/Board';
 import { getLoggedInUser, LoggedInUser } from '@/utils/auth';
 import { ArrowLeft, Lock } from 'lucide-react';
@@ -10,7 +9,6 @@ import Link from 'next/link';
 export default function AcademicPage() {
   const [currentUser, setCurrentUser] = useState<LoggedInUser | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
     setCurrentUser(getLoggedInUser());

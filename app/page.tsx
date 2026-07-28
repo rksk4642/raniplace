@@ -6,7 +6,7 @@ import {
   Calculator, Briefcase, BookOpen, Lock, Unlock, 
   Calendar as CalendarIcon, ShieldCheck, LogOut, ChevronRight, 
   ChevronDown, CheckCircle2, AlertCircle, ArrowRight, Sparkles, 
-  Menu, X, KeyRound
+  Menu, X
 } from 'lucide-react';
 import { 
   isAdminUnlocked as checkAdminUnlocked, 
