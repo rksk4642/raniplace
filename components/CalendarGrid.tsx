@@ -41,11 +41,7 @@ export default function CalendarGrid() {
   const [schoolSchedules, setSchoolSchedules] = useState<NeisSchedule[]>([]);
   const [isLoadingSchedules, setIsLoadingSchedules] = useState(false);
 
-  // 초기 날짜 선택 (오늘)
-  useEffect(() => {
-    const today = new Date();
-    setSelectedDate(formatDate(today.getFullYear(), today.getMonth(), today.getDate()));
-  }, []);
+  // 초기에는 날짜를 선택하지 않아 패널이 닫혀있도록 함
 
   // LocalStorage 연동 (최초 로드 시)
   useEffect(() => {
@@ -96,7 +92,7 @@ export default function CalendarGrid() {
   const goToday = () => {
     const today = new Date();
     setCurrentDate(today);
-    setSelectedDate(formatDate(today.getFullYear(), today.getMonth(), today.getDate()));
+    setSelectedDate(null); // 오늘로 이동 시 패널은 닫아둡니다.
   };
 
   // YYYY-MM-DD 포맷 변환기
@@ -104,9 +100,9 @@ export default function CalendarGrid() {
     return `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
   };
 
-  // 날짜 클릭 핸들러
+  // 날짜 클릭 핸들러 (토글)
   const handleDateClick = (dateStr: string) => {
-    setSelectedDate(dateStr);
+    setSelectedDate(prev => prev === dateStr ? null : dateStr);
   };
 
   // 새 일정 저장
@@ -332,18 +328,27 @@ export default function CalendarGrid() {
         </div>
       </div>
 
-      {/* 🔵 우측 영역: 일일 업무 상세 패널 (Split View) */}
-      <div className="w-full lg:w-80 flex-shrink-0 bg-white rounded-3xl border border-[#B8C4A9]/30 flex flex-col shadow-soft overflow-hidden">
-        {selectedDate ? (
+      {/* 🔵 우측 영역: 일일 업무 상세 패널 (Split View) - 선택 시에만 렌더링 */}
+      {selectedDate && (
+        <div className="w-full lg:w-80 flex-shrink-0 bg-white rounded-3xl border border-[#B8C4A9]/30 flex flex-col shadow-soft overflow-hidden animate-in fade-in slide-in-from-right-4 duration-300">
           <>
-            <div className="p-6 border-b border-[#B8C4A9]/20 bg-[#F8FAF9]">
-              <div className="flex items-center gap-2 text-[#5B88B2] mb-1">
-                <CalendarCheck className="w-5 h-5" />
-                <span className="font-bold text-sm">일일 업무 관리</span>
+            <div className="p-6 border-b border-[#B8C4A9]/20 bg-[#F8FAF9] flex justify-between items-start">
+              <div>
+                <div className="flex items-center gap-2 text-[#5B88B2] mb-1">
+                  <CalendarCheck className="w-5 h-5" />
+                  <span className="font-bold text-sm">일일 업무 관리</span>
+                </div>
+                <h3 className="text-2xl font-black text-[#2C3E35]">
+                  {selectedDate.split('-')[1]}월 {selectedDate.split('-')[2]}일
+                </h3>
               </div>
-              <h3 className="text-2xl font-black text-[#2C3E35]">
-                {selectedDate.split('-')[1]}월 {selectedDate.split('-')[2]}일
-              </h3>
+              <button 
+                onClick={() => setSelectedDate(null)}
+                className="text-[#2C3E35]/40 hover:text-[#2C3E35] transition-colors p-1"
+                title="닫기"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
             
             <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-white custom-scrollbar">
@@ -423,16 +428,8 @@ export default function CalendarGrid() {
               </form>
             </div>
           </>
-        ) : (
-          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-[#F8FAF9]">
-            <div className="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center mb-4 text-[#B8C4A9]">
-              <CalendarCheck className="w-8 h-8" />
-            </div>
-            <h3 className="text-lg font-bold text-[#2C3E35] mb-2">날짜를 선택해주세요</h3>
-            <p className="text-xs text-[#2C3E35]/60 font-medium">달력에서 날짜를 클릭하면<br />해당 일의 상세 업무를 관리할 수 있습니다.</p>
-          </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* NEIS 정보공시 학교 설정 모달 */}
       {isSchoolModalOpen && (
