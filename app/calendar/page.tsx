@@ -57,7 +57,7 @@ export default function CalendarPage() {
             </h1>
             <p className="text-xs text-[#2C3E35]/70 leading-relaxed mb-6">
               본 페이지는 <strong>3. 개인</strong> 영역의 하위 비공개 달력입니다.<br />
-              설정하신 비밀번호(<code className="bg-[#F8FAF9] px-1.5 py-0.5 rounded text-[#5B88B2] font-mono font-bold">dlswo12*</code>)를 입력해주세요.
+              설정하신 비밀번호를 입력해주세요.
             </p>
 
             <form onSubmit={handlePasswordSubmit} className="space-y-4 text-left">

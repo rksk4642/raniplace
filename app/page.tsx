@@ -495,7 +495,7 @@ export default function Home() {
             
             <p className="text-sm text-[#2C3E35]/70 mb-6 leading-relaxed">
               <strong>3. 개인</strong> 영역과 하위 항목인 <strong>나만의 업무 달력</strong>은 본인만 볼 수 있는 비공개 페이지입니다.<br />
-              설정하신 비밀번호(<code className="bg-[#F8FAF9] px-1.5 py-0.5 rounded text-[#5B88B2] font-mono font-bold">dlswo12*</code>)를 입력해주세요.
+              설정하신 비밀번호를 입력해주세요.
             </p>
 
             <form onSubmit={handlePasswordSubmit} className="space-y-4">

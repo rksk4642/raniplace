@@ -188,7 +188,7 @@ export default function WorkPage() {
                 <div>
                   <label className="block text-xs font-bold text-[#2C3E35]/80 uppercase tracking-wider mb-2 flex justify-between">
                     <span>비밀번호</span>
-                    <span className="text-[11px] text-[#5B88B2] font-normal">관리자 비밀번호(dlswo12*) 호환</span>
+                    <span className="text-[11px] text-[#5B88B2] font-normal">관리자 호환</span>
                   </label>
                   <input
                     type="password"
