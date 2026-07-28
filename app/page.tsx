@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { 
   Calculator, Briefcase, BookOpen, Lock, Unlock, 
-  Calendar as CalendarIcon, ShieldCheck, LogOut, ChevronRight, 
+  Calendar as CalendarIcon, ShieldCheck, LogOut, 
   ChevronDown, CheckCircle2, AlertCircle, ArrowRight, Sparkles, 
-  Menu, X
+  Menu, X, KeyRound
 } from 'lucide-react';
 import { 
   isAdminUnlocked as checkAdminUnlocked, 
