@@ -15,7 +15,8 @@ import {
   isAdminUnlocked as checkAdminUnlocked, 
   setAdminUnlocked, 
   verifyAdminPassword, 
-  AuthRequest 
+  AuthRequest,
+  subscribeToAuthRequests
 } from '@/utils/auth';
 
 export default function AdminApprovalsPage() {
@@ -26,17 +27,23 @@ export default function AdminApprovalsPage() {
   const [requests, setRequests] = useState<AuthRequest[]>([]);
   const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('pending');
 
-  const loadRequests = () => {
-    setRequests(getAuthRequests());
+  const loadRequests = async () => {
+    const data = await getAuthRequests();
+    setRequests(data);
     setIsAdminUnlockedState(checkAdminUnlocked());
   };
 
   useEffect(() => {
     loadRequests();
-    window.addEventListener('auth_requests_updated', loadRequests);
+    
+    const sub = subscribeToAuthRequests(() => {
+      loadRequests();
+    });
+    
     window.addEventListener('admin_unlocked_updated', loadRequests);
+
     return () => {
-      window.removeEventListener('auth_requests_updated', loadRequests);
+      sub.unsubscribe();
       window.removeEventListener('admin_unlocked_updated', loadRequests);
     };
   }, []);
@@ -153,16 +160,16 @@ export default function AdminApprovalsPage() {
           {/* 테스트 도구 및 상태 */}
           <div className="flex flex-wrap items-center gap-2.5">
             <button
-              onClick={() => { addTestAuthRequest(); }}
+              onClick={async () => { await addTestAuthRequest(); }}
               className="px-3.5 py-2 rounded-xl bg-[#5B88B2]/10 hover:bg-[#5B88B2] text-[#5B88B2] hover:text-white font-bold text-xs transition-colors flex items-center gap-1.5 shadow-sm"
             >
               <UserPlus className="w-3.5 h-3.5" />
               <span>+ 테스트 신청 추가</span>
             </button>
             <button
-              onClick={() => { 
+              onClick={async () => { 
                 if (confirm('모든 요청 데이터를 초기 샘플 상태로 리셋하시겠습니까?')) {
-                  resetAuthRequests();
+                  await resetAuthRequests();
                 }
               }}
               className="px-3.5 py-2 rounded-xl bg-[#F8FAF9] hover:bg-red-50 text-[#2C3E35]/60 hover:text-red-600 border border-[#B8C4A9]/30 font-bold text-xs transition-colors flex items-center gap-1.5"
@@ -252,7 +259,7 @@ export default function AdminApprovalsPage() {
               상단 메뉴에서 다른 필터를 선택하거나 <strong>+ 테스트 신청 추가</strong> 버튼으로 가상의 교사 신청 내역을 생성해보세요.
             </p>
             <button
-              onClick={() => addTestAuthRequest()}
+              onClick={async () => await addTestAuthRequest()}
               className="px-5 py-3 rounded-2xl bg-[#2C3E35] text-white font-bold text-xs shadow-md hover:bg-[#3A5246] transition-all"
             >
               + 테스트 교사 신청 생성하기
@@ -294,7 +301,7 @@ export default function AdminApprovalsPage() {
                     )}
                     
                     <span className="text-[11px] text-[#2C3E35]/50 font-medium">
-                      {new Date(req.createdAt).toLocaleString('ko-KR', {
+                      {new Date(req.created_at).toLocaleString('ko-KR', {
                         month: 'short',
                         day: 'numeric',
                         hour: '2-digit',
@@ -332,14 +339,14 @@ export default function AdminApprovalsPage() {
                   {req.status === 'pending' ? (
                     <>
                       <button
-                        onClick={() => updateAuthRequestStatus(req.id, 'rejected')}
+                        onClick={async () => await updateAuthRequestStatus(req.id, 'rejected')}
                         className="flex-1 py-3 rounded-xl bg-[#F8FAF9] hover:bg-red-50 text-red-600 border border-red-200 font-bold text-xs transition-colors flex items-center justify-center gap-1.5"
                       >
                         <XCircle className="w-4 h-4" />
                         <span>거절하기</span>
                       </button>
                       <button
-                        onClick={() => updateAuthRequestStatus(req.id, 'approved')}
+                        onClick={async () => await updateAuthRequestStatus(req.id, 'approved')}
                         className="flex-1 py-3 rounded-xl bg-[#6E815C] hover:bg-[#59694A] text-white font-bold text-xs shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-1.5"
                       >
                         <CheckCircle2 className="w-4 h-4" />
@@ -350,7 +357,7 @@ export default function AdminApprovalsPage() {
                     <div className="w-full flex items-center justify-between">
                       <span className="text-xs font-semibold text-[#6E815C]">✅ 현재 업무 페이지 열람이 허용된 교사입니다.</span>
                       <button
-                        onClick={() => updateAuthRequestStatus(req.id, 'rejected')}
+                        onClick={async () => await updateAuthRequestStatus(req.id, 'rejected')}
                         className="px-3 py-1.5 rounded-lg bg-[#F8FAF9] hover:bg-red-50 text-[#2C3E35]/60 hover:text-red-600 text-[11px] font-bold transition-colors"
                       >
                         권한 취소
@@ -360,7 +367,7 @@ export default function AdminApprovalsPage() {
                     <div className="w-full flex items-center justify-between">
                       <span className="text-xs font-semibold text-red-500">❌ 현재 권한이 거절된 상태입니다.</span>
                       <button
-                        onClick={() => updateAuthRequestStatus(req.id, 'approved')}
+                        onClick={async () => await updateAuthRequestStatus(req.id, 'approved')}
                         className="px-3 py-1.5 rounded-lg bg-[#6E815C]/10 hover:bg-[#6E815C] text-[#6E815C] hover:text-white text-[11px] font-bold transition-colors"
                       >
                         다시 승인하기

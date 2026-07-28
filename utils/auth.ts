@@ -1,7 +1,7 @@
-// raniplace 인증 및 교사 승인 시스템 유틸리티
+import { supabase } from './supabase';
 
 export const ADMIN_PASSWORD = 'dlswo12*';
-export const AUTH_REQUESTS_KEY = 'raniplace_auth_requests';
+export const AUTH_REQUESTS_KEY = 'raniplace_auth_requests'; 
 export const ADMIN_UNLOCKED_KEY = 'raniplace_admin_unlocked';
 export const TEACHER_LOGGED_IN_KEY = 'raniplace_teacher_logged_in';
 
@@ -9,11 +9,11 @@ export interface AuthRequest {
   id: string;
   name: string;
   school: string;
-  email: string; // 아이디 또는 이메일
+  email: string;
   password?: string;
   message: string;
   status: 'pending' | 'approved' | 'rejected';
-  createdAt: string;
+  created_at: string;
 }
 
 export interface LoggedInUser {
@@ -22,83 +22,92 @@ export interface LoggedInUser {
   isAdmin: boolean;
 }
 
-// 초기 샘플 요청 데이터 생성
-const getInitialSampleRequests = (): AuthRequest[] => [
+// 초기 샘플 데이터
+const getInitialSampleRequests = () => [
   {
-    id: 'sample-1',
     name: '김서연 선생님',
     school: '서울푸른초등학교',
     email: 'sykim_teacher',
     password: 'password123!',
     message: '5학년 담임입니다. 업무 페이지 및 자료 열람 권한 승인 요청드립니다!',
     status: 'pending',
-    createdAt: new Date(Date.now() - 3600000 * 2).toISOString(),
   },
   {
-    id: 'sample-2',
     name: '이준호 선생님',
     school: '경기하늘중학교',
     email: 'lee_jh',
     password: 'password123!',
     message: '교과 연구 모임 회원입니다. 잘 부탁드립니다.',
     status: 'approved',
-    createdAt: new Date(Date.now() - 3600000 * 24).toISOString(),
   },
 ];
 
-// 인증 요청 목록 가져오기
-export function getAuthRequests(): AuthRequest[] {
+// 인증 요청 목록 가져오기 (Supabase)
+export async function getAuthRequests(): Promise<AuthRequest[]> {
   if (typeof window === 'undefined') return [];
-  const stored = localStorage.getItem(AUTH_REQUESTS_KEY);
-  if (!stored) {
-    const initial = getInitialSampleRequests();
-    localStorage.setItem(AUTH_REQUESTS_KEY, JSON.stringify(initial));
-    return initial;
-  }
-  try {
-    return JSON.parse(stored);
-  } catch (e) {
-    console.error('Failed to parse auth requests:', e);
+  
+  const { data, error } = await supabase
+    .from('auth_requests')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Failed to fetch auth requests:', error);
     return [];
   }
-}
 
-// 인증 요청 목록 저장하기
-export function saveAuthRequests(requests: AuthRequest[]): void {
-  if (typeof window === 'undefined') return;
-  localStorage.setItem(AUTH_REQUESTS_KEY, JSON.stringify(requests));
-  // 변경 사항 이벤트 전파
-  window.dispatchEvent(new Event('auth_requests_updated'));
+  // 데이터가 없으면 초기 샘플을 삽입하고 반환
+  if (!data || data.length === 0) {
+    const samples = getInitialSampleRequests();
+    const { data: inserted, error: insertError } = await supabase
+      .from('auth_requests')
+      .insert(samples)
+      .select();
+      
+    if (insertError) {
+      console.error('Failed to insert sample auth requests:', insertError);
+      return [];
+    }
+    return inserted as AuthRequest[];
+  }
+
+  return data as AuthRequest[];
 }
 
 // 신규 인증 요청 제출
-export function submitAuthRequest(data: Omit<AuthRequest, 'id' | 'status' | 'createdAt'>): AuthRequest {
-  const requests = getAuthRequests();
-  const newRequest: AuthRequest = {
-    ...data,
-    id: 'req-' + Date.now() + '-' + Math.random().toString(36).substring(2, 7),
-    status: 'pending',
-    createdAt: new Date().toISOString(),
-  };
-  requests.unshift(newRequest); // 최신 요청이 상단에 오도록 추가
-  saveAuthRequests(requests);
-  return newRequest;
+export async function submitAuthRequest(data: Omit<AuthRequest, 'id' | 'status' | 'created_at'>): Promise<AuthRequest | null> {
+  const { data: inserted, error } = await supabase
+    .from('auth_requests')
+    .insert([{ ...data, status: 'pending' }])
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Failed to submit auth request:', error);
+    return null;
+  }
+  return inserted as AuthRequest;
 }
 
 // 인증 요청 상태 업데이트 (승인/거절)
-export function updateAuthRequestStatus(id: string, status: 'approved' | 'rejected'): void {
-  const requests = getAuthRequests();
-  const updated = requests.map((req) => (req.id === id ? { ...req, status } : req));
-  saveAuthRequests(updated);
+export async function updateAuthRequestStatus(id: string, status: 'approved' | 'rejected'): Promise<void> {
+  const { error } = await supabase
+    .from('auth_requests')
+    .update({ status })
+    .eq('id', id);
+
+  if (error) {
+    console.error('Failed to update status:', error);
+  }
 }
 
 // 테스트용 샘플 데이터 추가
-export function addTestAuthRequest(): void {
+export async function addTestAuthRequest(): Promise<void> {
   const sampleNames = ['박지영 선생님', '최우진 선생님', '정하늘 선생님', '강민수 선생님'];
   const sampleSchools = ['인천해돋이초등학교', '부산가람중학교', '대구다솔고등학교', '광주빛고을초등학교'];
   const idx = Math.floor(Math.random() * sampleNames.length);
   
-  submitAuthRequest({
+  await submitAuthRequest({
     name: sampleNames[idx],
     school: sampleSchools[idx],
     email: `teacher_${Math.floor(Math.random() * 1000)}`,
@@ -108,11 +117,15 @@ export function addTestAuthRequest(): void {
 }
 
 // 목록 초기화
-export function resetAuthRequests(): void {
+export async function resetAuthRequests(): Promise<void> {
   if (typeof window === 'undefined') return;
-  localStorage.removeItem(AUTH_REQUESTS_KEY);
-  getAuthRequests(); // 초기 샘플로 재생성
-  window.dispatchEvent(new Event('auth_requests_updated'));
+  
+  await supabase
+    .from('auth_requests')
+    .delete()
+    .neq('id', '00000000-0000-0000-0000-000000000000'); // Delete all
+
+  await getAuthRequests(); // 샘플 데이터 다시 생성
 }
 
 // 관리자 비밀번호 검증
@@ -175,12 +188,12 @@ export function setLoggedInUser(user: LoggedInUser | null): void {
   window.dispatchEvent(new Event('user_login_updated'));
 }
 
-// 교사 로그인 시증 및 승인 여부 검증
-export function verifyTeacherLogin(emailOrName: string, pass: string): {
+// 교사 로그인 시도 및 승인 여부 검증
+export async function verifyTeacherLogin(emailOrName: string, pass: string): Promise<{
   success: boolean;
   message?: string;
   user?: LoggedInUser;
-} {
+}> {
   const input = emailOrName.trim();
   const password = pass.trim();
 
@@ -192,13 +205,16 @@ export function verifyTeacherLogin(emailOrName: string, pass: string): {
     return { success: true, user };
   }
 
-  // 2. 인증 요청 목록(교사 DB)에서 확인
-  const requests = getAuthRequests();
-  const found = requests.find(
-    (req) => (req.email === input || req.name === input) && req.password === password
-  );
+  // 2. Supabase DB에서 확인
+  const { data: found, error } = await supabase
+    .from('auth_requests')
+    .select('*')
+    .or(`email.eq.${input},name.eq.${input}`)
+    .eq('password', password)
+    .limit(1)
+    .single();
 
-  if (!found) {
+  if (error || !found) {
     return {
       success: false,
       message: '아이디(또는 이름)와 비밀번호가 일치하지 않습니다. 신규 선생님이시라면 [교사 인증 요청]을 먼저 진행해주세요.',
@@ -223,4 +239,26 @@ export function verifyTeacherLogin(emailOrName: string, pass: string): {
   const user: LoggedInUser = { name: found.name, email: found.email, isAdmin: false };
   setLoggedInUser(user);
   return { success: true, user };
+}
+
+// Realtime 구독 설정 헬퍼
+export function subscribeToAuthRequests(callback: () => void) {
+  if (typeof window === 'undefined') return { unsubscribe: () => {} };
+  
+  const channel = supabase
+    .channel('public:auth_requests')
+    .on(
+      'postgres_changes',
+      { event: '*', schema: 'public', table: 'auth_requests' },
+      () => {
+        callback();
+      }
+    )
+    .subscribe();
+
+  return {
+    unsubscribe: () => {
+      supabase.removeChannel(channel);
+    }
+  };
 }

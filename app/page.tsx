@@ -14,7 +14,8 @@ import {
   verifyAdminPassword, 
   getAuthRequests,
   getLoggedInUser,
-  LoggedInUser
+  LoggedInUser,
+  subscribeToAuthRequests
 } from '@/utils/auth';
 
 export default function Home() {
@@ -28,22 +29,25 @@ export default function Home() {
 
   // 초기 상태 및 이벤트 핸들러 등록
   useEffect(() => {
-    const updateState = () => {
+    const updateState = async () => {
       setIsAdminUnlockedState(checkAdminUnlocked());
       setCurrentUser(getLoggedInUser());
-      const requests = getAuthRequests();
+      const requests = await getAuthRequests();
       setPendingCount(requests.filter((r) => r.status === 'pending').length);
     };
 
     updateState();
     window.addEventListener('admin_unlocked_updated', updateState);
-    window.addEventListener('auth_requests_updated', updateState);
     window.addEventListener('user_login_updated', updateState);
+
+    const sub = subscribeToAuthRequests(() => {
+      updateState();
+    });
 
     return () => {
       window.removeEventListener('admin_unlocked_updated', updateState);
-      window.removeEventListener('auth_requests_updated', updateState);
       window.removeEventListener('user_login_updated', updateState);
+      sub.unsubscribe();
     };
   }, []);
 

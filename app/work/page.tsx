@@ -13,7 +13,8 @@ import {
   verifyTeacherLogin, 
   submitAuthRequest, 
   getAuthRequests, 
-  LoggedInUser 
+  LoggedInUser,
+  subscribeToAuthRequests
 } from '@/utils/auth';
 
 export default function WorkPage() {
@@ -46,34 +47,34 @@ export default function WorkPage() {
   ]);
 
   useEffect(() => {
-    const updateState = () => {
+    const updateState = async () => {
       const user = getLoggedInUser();
       setCurrentUser(user);
-      const reqs = getAuthRequests();
+      const reqs = await getAuthRequests();
       setPendingCount(reqs.filter((r) => r.status === 'pending').length);
     };
 
     updateState();
-    window.addEventListener('user_login_updated', updateState);
-    window.addEventListener('auth_requests_updated', updateState);
-    window.addEventListener('admin_unlocked_updated', updateState);
+
+    const sub = subscribeToAuthRequests(() => {
+      updateState();
+    });
 
     return () => {
-      window.removeEventListener('user_login_updated', updateState);
-      window.removeEventListener('auth_requests_updated', updateState);
-      window.removeEventListener('admin_unlocked_updated', updateState);
+      sub.unsubscribe();
     };
   }, []);
 
   // 로그인 처리
-  const handleLoginSubmit = (e: React.FormEvent) => {
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError('');
-    if (!loginPass) {
-      setLoginError('비밀번호를 입력해주세요.');
+    if (!loginId.trim() || !loginPass.trim()) {
+      setLoginError('아이디(이름)와 비밀번호를 모두 입력해주세요.');
       return;
     }
-    const res = verifyTeacherLogin(loginId, loginPass);
+
+    const res = await verifyTeacherLogin(loginId, loginPass);
     if (res.success && res.user) {
       setCurrentUser(res.user);
     } else {
@@ -82,7 +83,7 @@ export default function WorkPage() {
   };
 
   // 인증 요청 처리
-  const handleRegisterSubmit = (e: React.FormEvent) => {
+  const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setReqError('');
 
@@ -91,7 +92,7 @@ export default function WorkPage() {
       return;
     }
 
-    submitAuthRequest({
+    await submitAuthRequest({
       name: reqName.trim(),
       school: reqSchool.trim(),
       email: reqEmail.trim(),
