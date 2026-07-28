@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { 
-  MountainSnow, Waves, Briefcase, BookOpen, Lock, Unlock, 
+  Calculator, Waves, Briefcase, BookOpen, Lock, Unlock, 
   Calendar as CalendarIcon, ShieldCheck, LogOut, ChevronRight, 
   ChevronDown, CheckCircle2, AlertCircle, ArrowRight, Sparkles, 
   Menu, X, KeyRound, UserCheck 
@@ -72,7 +72,7 @@ export default function Home() {
       {/* 모바일 상단 헤더 */}
       <header className="md:hidden flex items-center justify-between p-4 bg-white border-b border-[#B8C4A9]/20 sticky top-0 z-40">
         <div className="flex items-center gap-2 font-bold text-lg text-[#2C3E35]">
-          <MountainSnow className="w-6 h-6 text-[#6E815C]" />
+          <Calculator className="w-6 h-6 text-[#6E815C]" />
           <span>raniplace</span>
         </div>
         <button 
@@ -103,12 +103,12 @@ export default function Home() {
         <div className="p-6 border-b border-[#B8C4A9]/20 hidden md:flex flex-col gap-1">
           <div className="flex items-center gap-2.5 font-bold text-2xl tracking-tight text-[#2C3E35]">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#6E815C] to-[#2C3E35] flex items-center justify-center text-white shadow-sm">
-              <MountainSnow className="w-5 h-5" />
+              <Calculator className="w-5 h-5" />
             </div>
             <span>raniplace</span>
           </div>
           <span className="text-xs font-medium text-[#5B88B2] pl-1 tracking-wide">
-            자연을 닮은 교사 업무 플랫폼
+            수학교사를 위한 스마트 업무 플랫폼
           </span>
         </div>
 
@@ -119,29 +119,51 @@ export default function Home() {
           </div>
 
           {/* 1. 업무 */}
-          <Link 
-            href="/work"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="group flex items-center justify-between p-3.5 rounded-2xl bg-[#F8FAF9]/80 hover:bg-[#5B88B2]/10 border border-transparent hover:border-[#5B88B2]/20 transition-all duration-200"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-white shadow-soft flex items-center justify-center text-[#5B88B2] group-hover:scale-105 transition-transform duration-200">
-                <Briefcase className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="font-bold text-sm text-[#2C3E35] group-hover:text-[#5B88B2] transition-colors flex items-center gap-1.5">
-                  1. 업무
-                  <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-[#5B88B2]/10 text-[#5B88B2]">
-                    인증필요
-                  </span>
+          <div className="flex flex-col gap-1">
+            <Link 
+              href="/work"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="group flex items-center justify-between p-3.5 rounded-2xl bg-[#F8FAF9]/80 hover:bg-[#5B88B2]/10 border border-transparent hover:border-[#5B88B2]/20 transition-all duration-200"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-white shadow-soft flex items-center justify-center text-[#5B88B2] group-hover:scale-105 transition-transform duration-200">
+                  <Briefcase className="w-5 h-5" />
                 </div>
-                <div className="text-xs text-[#2C3E35]/60 mt-0.5">
-                  행정 공문 및 주간 업무
+                <div>
+                  <div className="font-bold text-sm text-[#2C3E35] group-hover:text-[#5B88B2] transition-colors flex items-center gap-1.5">
+                    1. 업무
+                    <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-[#5B88B2]/10 text-[#5B88B2]">
+                      인증필요
+                    </span>
+                  </div>
+                  <div className="text-xs text-[#2C3E35]/60 mt-0.5">
+                    행정 공문 및 주간 업무
+                  </div>
                 </div>
               </div>
+              <ChevronDown className="w-4 h-4 text-[#2C3E35]/40 transition-all" />
+            </Link>
+
+            {/* 1. 업무 - 하위 메뉴 */}
+            <div className="ml-12 pl-3 border-l-2 border-[#B8C4A9]/20 flex flex-col gap-1 py-1">
+              <Link 
+                href="/work/research" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-xs font-bold text-[#2C3E35]/70 hover:text-[#5B88B2] px-3 py-2 rounded-xl hover:bg-[#5B88B2]/5 transition-colors flex items-center gap-2"
+              >
+                <div className="w-1.5 h-1.5 rounded-full bg-[#B8C4A9]" />
+                연구부
+              </Link>
+              <Link 
+                href="/work/academic" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-xs font-bold text-[#2C3E35]/70 hover:text-[#5B88B2] px-3 py-2 rounded-xl hover:bg-[#5B88B2]/5 transition-colors flex items-center gap-2"
+              >
+                <div className="w-1.5 h-1.5 rounded-full bg-[#B8C4A9]" />
+                교무(수업계)
+              </Link>
             </div>
-            <ChevronRight className="w-4 h-4 text-[#2C3E35]/40 group-hover:text-[#5B88B2] group-hover:translate-x-0.5 transition-all" />
-          </Link>
+          </div>
 
           {/* 2. 수업 */}
           <div className="flex flex-col gap-1">
